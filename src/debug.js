@@ -9,10 +9,10 @@ export function printMaze(maze) {
 export function printPath(maze, path) {
   const clone = maze.slice();
   for (const step of path) {
-    clone[step[0]][step[1]] = 'x';
+    clone[step[1]][step[0]] = 'x';
   }
 
-  clone[path[0][0]][path[0][1]] = 's';
-  clone[path[path.length - 1][0]][path[path.length - 1][1]] = 'e';
+  clone[path[0][1]][path[0][0]] = 's';
+  clone[path[path.length - 1][1]][path[path.length - 1][0]] = 'e';
   printMaze(clone);
 }
