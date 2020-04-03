@@ -87,6 +87,9 @@ export function findPath(graph, from, to) {
       // 4.5.4. Add the child to the open list.
       openList.push(node);
     }
+
+    // 4.6. Sort Open List by so that lowest f is first.
+    openList.sort((a, b) => a.g - b.g);
   }
 
   return retVal;
