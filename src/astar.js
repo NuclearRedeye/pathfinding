@@ -1,13 +1,39 @@
-import { Node, compareNode } from './node.js';
+import { Point } from './point.js';
+
+const neighbours = [
+  [-1, -1],
+  [0, -1],
+  [1, -1],
+  [-1, 0],
+  [1, 0],
+  [-1, 1],
+  [0, 1],
+  [1, 1]
+];
+
+// Encapsultes a Node, that is used as part of the A* lookup
+class Node extends Point {
+  constructor(x, y, parent = undefined) {
+    super(x, y);
+    this.parent = parent;
+    this.f = 0; // Total 'cost' of the node.
+    this.g = 0; // Distance, in steps, from the starting point.
+    this.h = 0; // Estimated distance, in steps, from the destination.
+  }
+
+  equals(node) {
+    return this.x === node.x && this.y === node.y;
+  }
+}
 
 // Returns a path, or an empty array if no path is possible between 'from' and 'to' in the supplied graph using the A*
 // algorithm.
-export function findPath(graph, from, to) {
+export function getPath(graph, from, to, debug) {
   let retVal = [];
 
   // 1. Create the start and end nodes.
-  const startNode = new Node(from[0], from[1]);
-  const endNode = new Node(to[0], to[1]);
+  const startNode = new Node(from.x, from.y);
+  const endNode = new Node(to.x, to.y);
 
   // 2. Create the open and closed lists.
   const openList = [];
@@ -35,10 +61,10 @@ export function findPath(graph, from, to) {
     closedList.push(currentNode);
 
     // 4.3 See if we have found the goal
-    if (compareNode(currentNode, endNode)) {
+    if (currentNode.equals(endNode)) {
       let current = currentNode;
       while (current) {
-        retVal.push([current.x, current.y]);
+        retVal.push(current);
         current = current.parent;
       }
       retVal.reverse();
@@ -47,29 +73,26 @@ export function findPath(graph, from, to) {
 
     // 4.4 Generate nodes for the current node's neighbours.
     const nodeNeighbours = [];
-    for (let newPosition of currentNode.getNeighbours()) {
-      const newNodeX = currentNode.x + newPosition[0];
-      const newNodeY = currentNode.y + newPosition[1];
+    for (let newPosition of neighbours) {
+      const neighbour = new Node(currentNode.x + newPosition[0], currentNode.y + newPosition[1], currentNode);
 
       // 4.4.1 Ignore neighbours that are out of bounds.
-      if (newNodeX < 0 || newNodeX >= graph[0].length || newNodeY < 0 || newNodeY >= graph.length) {
+      if (neighbour.x < 0 || neighbour.x >= graph[0].length || neighbour.y < 0 || neighbour.y >= graph.length) {
         continue;
       }
 
       // 4.4.2 Ignore nodes that are blocking terrain.
-      if (graph[newNodeY][newNodeX] !== 0) {
+      if (graph[neighbour.y][neighbour.x] !== 0) {
         continue;
       }
 
-      const neighbour = new Node(newNodeX, newNodeY);
-      neighbour.parent = currentNode;
       nodeNeighbours.push(neighbour);
     }
 
     // 4.5. Loop through neighours...
     for (const node of nodeNeighbours) {
       // 4.5.1 Is the node in the closed list?
-      if (closedList.find((closedNode) => compareNode(closedNode, node))) {
+      if (closedList.find((closedNode) => node.equals(closedNode))) {
         continue;
       }
 
@@ -79,7 +102,7 @@ export function findPath(graph, from, to) {
       node.f = node.g + node.h;
 
       // 4.5.3 Child is already on the open list?
-      const openListNode = openList.find((openNode) => compareNode(openNode, node));
+      const openListNode = openList.find((openNode) => node.equals(openNode));
       if (openListNode && node.g > openListNode.g) {
         continue;
       }
@@ -90,6 +113,11 @@ export function findPath(graph, from, to) {
 
     // 4.6. Sort Open List by so that lowest f is first.
     openList.sort((a, b) => a.g - b.g);
+
+    // If debugging is enabled, call it...
+    if (debug) {
+      debug(graph, openList, closedList);
+    }
   }
 
   return retVal;

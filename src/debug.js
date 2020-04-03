@@ -1,13 +1,22 @@
 // Prints a 'maze' to the console.
-export function printMaze(maze) {
+function printMaze(maze) {
   for (const row of maze) {
     console.log(row.join(' '));
   }
 }
 
+// Prints a 'maze' to the console.
+function cloneMaze(maze) {
+  let retVal = [];
+  for (const row of maze) {
+    retVal.push(row.slice());
+  }
+  return retVal;
+}
+
 // Prints the 'maze' with the 'path' to the console.
 export function printPath(maze, path) {
-  const clone = maze.slice();
+  const clone = cloneMaze(maze);
   for (const step of path) {
     clone[step.y][step.x] = 'x';
   }
@@ -19,7 +28,7 @@ export function printPath(maze, path) {
 
 // Prints the 'maze' with the 'path' to the console.
 export function printState(maze, openList, closedList) {
-  const clone = maze.slice();
+  const clone = cloneMaze(maze);
   for (const point of openList) {
     clone[point.y][point.x] = 'O';
   }
