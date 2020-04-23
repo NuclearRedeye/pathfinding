@@ -1,0 +1,29 @@
+{
+  "name": "pathfinding",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "distclean": "rimraf dist node_modules",
+    "prebuild": "rimraf dist",
+    "build": "tsc",
+    "postbuild": "rollup --config",
+    "start": "node --experimental-modules ./dist/debug/index.js",
+    "debug": "npx serve ./dist/debug/",
+    "lint": "eslint ./src --ext .js,.ts",
+    "test": "echo nothing to do for target 'test'",
+    "release": "standard-version"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^13.13.2",
+    "rimraf": "^3.0.2",
+    "rollup": "^2.7.1",
+    "rollup-plugin-copy": "^3.3.0",
+    "rollup-plugin-terser": "^5.3.0",
+    "serve": "^11.3.0",
+    "typescript": "^3.8.3"
+  }
+}

@@ -6,7 +6,8 @@
       "type": "node",
       "runtimeArgs": ["--experimental-modules"],
       "request": "launch",
-      "program": "${workspaceFolder}/src/index.js"
+      "program": "${workspaceFolder}/dist/debug/index.js",
+      "preLaunchTask": "npm: build"
     }
   ]
 }
