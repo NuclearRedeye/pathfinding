@@ -10,6 +10,7 @@ DOCKER := docker run --rm -w=/$(PROJECT) -v $(CURDIR):/$(PROJECT):rw
 TS     := $(shell find ./src/ts -type f -name *.ts)
 SASS   := $(shell find ./src/scss -type f -name *.scss)
 HTML   := $(shell find ./src/html -type f -name *.html)
+ASSETS := $(shell find ./src/assets -type f)
 
 # Targets that don't result in output of the same name.
 .PHONY: clean \
@@ -82,7 +83,7 @@ lint: node_modules
 # Target to run all unit tests.
 test: node_modules
 	@echo "Running unit tests..."
-	@$(DOCKER) node:$(NODE_VERSION) npx jest
+	@$(DOCKER) node:$(NODE_VERSION) npx jest --passWithNoTests
 
 # Target that builds a debug/development version of the app
 debug: out/debug out/debug/index.html out/debug/index.css out/debug/index.js
