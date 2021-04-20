@@ -1,15 +1,22 @@
 import { Node } from './objects/node.js';
 //import { default as Resolver } from './algorithms/frontier.js';
 import { default as Resolver } from './algorithms/astar.js';
-import { drawGraph, drawOpenList, drawClosedList, drawPath } from './utils/canvas-utils.js';
+import { drawAll } from './utils/canvas-utils.js';
 import { testMaze01 } from './mazes.js';
 
 let pathFinder: Resolver;
+let canvas: HTMLCanvasElement;
+let context: CanvasRenderingContext2D;
+
+function onReset(): void {
+  pathFinder = new Resolver(testMaze01, new Node(0, 0), new Node(9, 9));
+  drawAll(context, pathFinder);
+}
 
 function onStep(): void {
   if (!pathFinder.isResolved()) {
     pathFinder.step();
-    draw();
+    drawAll(context, pathFinder);
   }
 }
 
@@ -20,27 +27,24 @@ function onAnimate(): void {
       clearInterval(interval);
     } else {
       pathFinder.step();
-      draw();
+      drawAll(context, pathFinder);
     }
   }, 25);
 }
 
 function onResolve(): void {
   pathFinder.resolve();
-  draw();
-}
-
-function draw() {
-  const canvas: HTMLCanvasElement = document.getElementById('view') as HTMLCanvasElement;
-  const context: CanvasRenderingContext2D = canvas.getContext('2d') as CanvasRenderingContext2D;
-  drawGraph(context, pathFinder);
-  drawOpenList(context, pathFinder);
-  drawClosedList(context, pathFinder);
-  drawPath(context, pathFinder);
+  drawAll(context, pathFinder);
 }
 
 window.onload = function () {
+  canvas = document.getElementById('view') as HTMLCanvasElement;
+  context = canvas.getContext('2d') as CanvasRenderingContext2D;
+
   pathFinder = new Resolver(testMaze01, new Node(0, 0), new Node(9, 9));
+
+  const buttonReset = document.getElementById('reset') as HTMLElement;
+  buttonReset.addEventListener('click', onReset);
 
   const buttonStep = document.getElementById('step') as HTMLElement;
   buttonStep.addEventListener('click', onStep);
@@ -51,5 +55,5 @@ window.onload = function () {
   const buttonResolve = document.getElementById('resolve') as HTMLElement;
   buttonResolve.addEventListener('click', onResolve);
 
-  draw();
+  drawAll(context, pathFinder);
 };

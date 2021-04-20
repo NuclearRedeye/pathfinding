@@ -36,3 +36,10 @@ export function drawClosedList(context: CanvasRenderingContext2D, resolver: Reso
 export function drawPath(context: CanvasRenderingContext2D, resolver: Resolver): void {
   drawList(context, resolver.getPath(), 'green');
 }
+
+export function drawAll(context: CanvasRenderingContext2D, resolver: Resolver): void {
+  drawGraph(context, resolver);
+  drawOpenList(context, resolver);
+  drawClosedList(context, resolver);
+  drawPath(context, resolver);
+}
