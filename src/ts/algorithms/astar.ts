@@ -73,7 +73,7 @@ export default class AStar implements Resolver {
     return this.path.length > 0;
   }
 
-  step() {
+  step(): void {
     let currentNode = this.openList[0];
     let currentIndex = 0;
 
@@ -102,16 +102,11 @@ export default class AStar implements Resolver {
 
     // 4.4 Generate nodes for the current node's neighbours.
     const nodeNeighbours = [];
-    for (let newPosition of neighbours) {
+    for (const newPosition of neighbours) {
       const neighbour = new AStarNode(currentNode.x + newPosition[0], currentNode.y + newPosition[1], currentNode);
 
       // 4.4.1 Ignore neighbours that are out of bounds.
-      if (
-        neighbour.x < 0 ||
-        neighbour.x >= this.graph[0].length ||
-        neighbour.y < 0 ||
-        neighbour.y >= this.graph.length
-      ) {
+      if (neighbour.x < 0 || neighbour.x >= this.graph[0].length || neighbour.y < 0 || neighbour.y >= this.graph.length) {
         continue;
       }
 

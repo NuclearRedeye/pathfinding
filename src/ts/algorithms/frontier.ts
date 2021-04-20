@@ -111,7 +111,7 @@ export default class Frontier implements Resolver {
     this.steps += 1;
   }
 
-  resolve() {
+  resolve(): void {
     // Then, as long as there are Nodes on the open list...
     while (this.openList.length > 0 && this.path.length === 0) {
       this.step();

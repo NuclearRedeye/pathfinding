@@ -21,8 +21,7 @@ function onStep(): void {
 }
 
 function onAnimate(): void {
-  let interval: NodeJS.Timeout;
-  interval = setInterval(() => {
+  const interval: NodeJS.Timeout = setInterval(() => {
     if (pathFinder.isResolved()) {
       clearInterval(interval);
     } else {

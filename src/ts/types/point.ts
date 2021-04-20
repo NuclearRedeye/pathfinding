@@ -14,12 +14,12 @@ export class Point implements Point {
     this.y = y;
   }
 
-  sum(point: Point) {
+  sum(point: Point): void {
     this.x += point.x;
     this.y += point.y;
   }
 
-  equals(point: Point) {
+  equals(point: Point): boolean {
     return this.x === point.x && this.y === point.y;
   }
 }
