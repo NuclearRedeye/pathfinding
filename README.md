@@ -2,27 +2,26 @@
 
 Experiment in generating paths through graphs.
 
-## A \*
+## Prerequisites
 
-The general algorithm for A \* is as follows...
+* You have a Linux or OSX machine. Windows should be supported via WSL 2 but has not been tested.
+* You have installed a recent version of [GNU Make](https://www.gnu.org/software/make/).
+* You have installed a recent version of [Docker](https://www.docker.com/).
+
+## Quick Start
+
+You can build the project for development using...
 
 ```
-OPEN = priority queue containing START
-CLOSED = empty set
-while lowest rank in OPEN is not the GOAL:
-  current = remove lowest rank item from OPEN
-  add current to CLOSED
-  for neighbors of current:
-    cost = g(current) + movementcost(current, neighbor)
-    if neighbor in OPEN and cost less than g(neighbor):
-      remove neighbor from OPEN, because new path is better
-    if neighbor in CLOSED and cost less than g(neighbor): ⁽²⁾
-      remove neighbor from CLOSED
-    if neighbor not in OPEN and neighbor not in CLOSED:
-      set g(neighbor) to cost
-      add neighbor to OPEN
-      set priority queue rank to g(neighbor) + h(neighbor)
-      set neighbor's parent to current
-
-reconstruct reverse path from goal to start by following parent pointers
+make
 ```
+
+You can also package the project for distribution using...
+
+```
+make release
+docker build -t pathfinding:latest .
+```
+## License
+
+Licensed under [MIT](https://choosealicense.com/licenses/mit/).
